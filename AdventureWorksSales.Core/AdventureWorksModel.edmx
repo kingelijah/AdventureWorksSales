@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="AdventureWorksSalesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="AdventureWorksSalesModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
 warning 6002: The table/view 'AdventureWorksSales.dbo.Product' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="Product">
@@ -49,14 +49,9 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.Product' does not have a p
           <Property Name="rowguid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'AdventureWorksSales.dbo.ProductCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="ProductCategory">
           <Key>
             <PropertyRef Name="ProductCategoryID" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="rowguid" />
-            <PropertyRef Name="ModifiedDate" />
           </Key>
           <Property Name="ProductCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -91,6 +86,7 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
           <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityContainer Name="AdventureWorksSalesModelStoreContainer">
+          <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [Product].[ProductID] AS [ProductID], 
@@ -120,14 +116,6 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
     [Product].[ModifiedDate] AS [ModifiedDate]
     FROM [dbo].[Product] AS [Product]</DefiningQuery>
           </EntitySet>
-          <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [ProductCategory].[ProductCategoryID] AS [ProductCategoryID], 
-    [ProductCategory].[Name] AS [Name], 
-    [ProductCategory].[rowguid] AS [rowguid], 
-    [ProductCategory].[ModifiedDate] AS [ModifiedDate]
-    FROM [dbo].[ProductCategory] AS [ProductCategory]</DefiningQuery>
-          </EntitySet>
           <EntitySet Name="SalesOrder" EntityType="Self.SalesOrder" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [SalesOrder].[SalesOrderID] AS [SalesOrderID], 
@@ -144,11 +132,24 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
     FROM [dbo].[SalesOrder] AS [SalesOrder]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="AdventureWorksSalesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AdventureWorksSalesDbContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ProductCategories" EntityType="AdventureWorksSalesModel.ProductCategory" />
+          <EntitySet Name="Products" EntityType="AdventureWorksSalesModel.Product" />
+          <EntitySet Name="SalesOrders" EntityType="AdventureWorksSalesModel.SalesOrder" />
+        </EntityContainer>
+        <EntityType Name="ProductCategory">
+          <Key>
+            <PropertyRef Name="ProductCategoryID" />
+          </Key>
+          <Property Name="ProductCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="rowguid" Type="Guid" Nullable="false" />
+          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
         <EntityType Name="Product">
           <Key>
             <PropertyRef Name="ProductID" />
@@ -166,15 +167,15 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
             <PropertyRef Name="ModifiedDate" />
           </Key>
           <Property Name="ProductID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="ProductNumber" Type="String" MaxLength="25" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProductNumber" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="true" />
           <Property Name="MakeFlag" Type="Boolean" Nullable="false" />
           <Property Name="FinishedGoodsFlag" Type="Boolean" Nullable="false" />
           <Property Name="Color" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="SafetyStockLevel" Type="Int16" Nullable="false" />
           <Property Name="ReorderPoint" Type="Int16" Nullable="false" />
-          <Property Name="StandardCost" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="ListPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
+          <Property Name="StandardCost" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="ListPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
           <Property Name="Size" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
           <Property Name="SizeUnitMeasureCode" Type="String" MaxLength="3" FixedLength="true" Unicode="true" />
           <Property Name="WeightUnitMeasureCode" Type="String" MaxLength="3" FixedLength="true" Unicode="true" />
@@ -188,18 +189,6 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
           <Property Name="SellStartDate" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="SellEndDate" Type="DateTime" Precision="3" />
           <Property Name="DiscontinuedDate" Type="DateTime" Precision="3" />
-          <Property Name="rowguid" Type="Guid" Nullable="false" />
-          <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
-        </EntityType>
-        <EntityType Name="ProductCategory">
-          <Key>
-            <PropertyRef Name="ProductCategoryID" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="rowguid" />
-            <PropertyRef Name="ModifiedDate" />
-          </Key>
-          <Property Name="ProductCategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="rowguid" Type="Guid" Nullable="false" />
           <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
@@ -222,78 +211,73 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
           <Property Name="OrderQty" Type="Int16" Nullable="false" />
           <Property Name="ProductID" Type="Int32" Nullable="false" />
           <Property Name="SpecialOfferID" Type="Int32" Nullable="false" />
-          <Property Name="UnitPrice" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="UnitPriceDiscount" Type="Decimal" Precision="19" Scale="4" Nullable="false" />
-          <Property Name="LineTotal" Type="Decimal" Precision="38" Scale="6" Nullable="false" />
+          <Property Name="UnitPrice" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="UnitPriceDiscount" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="LineTotal" Type="Decimal" Nullable="false" Precision="38" Scale="6" />
           <Property Name="rowguid" Type="Guid" Nullable="false" />
           <Property Name="ModifiedDate" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
-        <EntityContainer Name="AdventureWorksSalesDbContext" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Products" EntityType="Self.Product" />
-          <EntitySet Name="ProductCategories" EntityType="Self.ProductCategory" />
-          <EntitySet Name="SalesOrders" EntityType="Self.SalesOrder" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AdventureWorksSalesModelStoreContainer" CdmEntityContainer="AdventureWorksSalesDbContext">
-          <EntitySetMapping Name="Products">
-            <EntityTypeMapping TypeName="AdventureWorksSalesModel.Product">
-              <MappingFragment StoreEntitySet="Product">
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ProductNumber" ColumnName="ProductNumber" />
-                <ScalarProperty Name="MakeFlag" ColumnName="MakeFlag" />
-                <ScalarProperty Name="FinishedGoodsFlag" ColumnName="FinishedGoodsFlag" />
-                <ScalarProperty Name="Color" ColumnName="Color" />
-                <ScalarProperty Name="SafetyStockLevel" ColumnName="SafetyStockLevel" />
-                <ScalarProperty Name="ReorderPoint" ColumnName="ReorderPoint" />
-                <ScalarProperty Name="StandardCost" ColumnName="StandardCost" />
-                <ScalarProperty Name="ListPrice" ColumnName="ListPrice" />
-                <ScalarProperty Name="Size" ColumnName="Size" />
-                <ScalarProperty Name="SizeUnitMeasureCode" ColumnName="SizeUnitMeasureCode" />
-                <ScalarProperty Name="WeightUnitMeasureCode" ColumnName="WeightUnitMeasureCode" />
-                <ScalarProperty Name="Weight" ColumnName="Weight" />
-                <ScalarProperty Name="DaysToManufacture" ColumnName="DaysToManufacture" />
-                <ScalarProperty Name="ProductLine" ColumnName="ProductLine" />
-                <ScalarProperty Name="Class" ColumnName="Class" />
-                <ScalarProperty Name="Style" ColumnName="Style" />
-                <ScalarProperty Name="ProductSubcategoryID" ColumnName="ProductSubcategoryID" />
-                <ScalarProperty Name="ProductModelID" ColumnName="ProductModelID" />
-                <ScalarProperty Name="SellStartDate" ColumnName="SellStartDate" />
-                <ScalarProperty Name="SellEndDate" ColumnName="SellEndDate" />
-                <ScalarProperty Name="DiscontinuedDate" ColumnName="DiscontinuedDate" />
-                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
-                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="ProductCategories">
             <EntityTypeMapping TypeName="AdventureWorksSalesModel.ProductCategory">
               <MappingFragment StoreEntitySet="ProductCategory">
-                <ScalarProperty Name="ProductCategoryID" ColumnName="ProductCategoryID" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductCategoryID" ColumnName="ProductCategoryID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="AdventureWorksSalesModel.Product">
+              <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
+                <ScalarProperty Name="DiscontinuedDate" ColumnName="DiscontinuedDate" />
+                <ScalarProperty Name="SellEndDate" ColumnName="SellEndDate" />
+                <ScalarProperty Name="SellStartDate" ColumnName="SellStartDate" />
+                <ScalarProperty Name="ProductModelID" ColumnName="ProductModelID" />
+                <ScalarProperty Name="ProductSubcategoryID" ColumnName="ProductSubcategoryID" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="Class" ColumnName="Class" />
+                <ScalarProperty Name="ProductLine" ColumnName="ProductLine" />
+                <ScalarProperty Name="DaysToManufacture" ColumnName="DaysToManufacture" />
+                <ScalarProperty Name="Weight" ColumnName="Weight" />
+                <ScalarProperty Name="WeightUnitMeasureCode" ColumnName="WeightUnitMeasureCode" />
+                <ScalarProperty Name="SizeUnitMeasureCode" ColumnName="SizeUnitMeasureCode" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="ListPrice" ColumnName="ListPrice" />
+                <ScalarProperty Name="StandardCost" ColumnName="StandardCost" />
+                <ScalarProperty Name="ReorderPoint" ColumnName="ReorderPoint" />
+                <ScalarProperty Name="SafetyStockLevel" ColumnName="SafetyStockLevel" />
+                <ScalarProperty Name="Color" ColumnName="Color" />
+                <ScalarProperty Name="FinishedGoodsFlag" ColumnName="FinishedGoodsFlag" />
+                <ScalarProperty Name="MakeFlag" ColumnName="MakeFlag" />
+                <ScalarProperty Name="ProductNumber" ColumnName="ProductNumber" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="SalesOrders">
             <EntityTypeMapping TypeName="AdventureWorksSalesModel.SalesOrder">
               <MappingFragment StoreEntitySet="SalesOrder">
-                <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
-                <ScalarProperty Name="SalesOrderDetailID" ColumnName="SalesOrderDetailID" />
-                <ScalarProperty Name="CarrierTrackingNumber" ColumnName="CarrierTrackingNumber" />
-                <ScalarProperty Name="OrderQty" ColumnName="OrderQty" />
-                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
-                <ScalarProperty Name="SpecialOfferID" ColumnName="SpecialOfferID" />
-                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
-                <ScalarProperty Name="UnitPriceDiscount" ColumnName="UnitPriceDiscount" />
-                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
-                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
                 <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="rowguid" ColumnName="rowguid" />
+                <ScalarProperty Name="LineTotal" ColumnName="LineTotal" />
+                <ScalarProperty Name="UnitPriceDiscount" ColumnName="UnitPriceDiscount" />
+                <ScalarProperty Name="UnitPrice" ColumnName="UnitPrice" />
+                <ScalarProperty Name="SpecialOfferID" ColumnName="SpecialOfferID" />
+                <ScalarProperty Name="ProductID" ColumnName="ProductID" />
+                <ScalarProperty Name="OrderQty" ColumnName="OrderQty" />
+                <ScalarProperty Name="CarrierTrackingNumber" ColumnName="CarrierTrackingNumber" />
+                <ScalarProperty Name="SalesOrderDetailID" ColumnName="SalesOrderDetailID" />
+                <ScalarProperty Name="SalesOrderID" ColumnName="SalesOrderID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

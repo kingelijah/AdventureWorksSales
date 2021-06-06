@@ -18,7 +18,7 @@ namespace AdventureWorksSales.Web.Controllers
 
         public ActionResult Index()
         {
-            ViewBag.HighestLine = Math.Round(_salesOrderRepository.HighestLineTotal()); 
+            ViewBag.HighestLine = _salesOrderRepository.HighestLineTotal().ToString("#.##"); 
             ViewBag.FrontBrakes = _salesOrderRepository.FrontBrakesTotal();
             ViewBag.TotalCount = _salesOrderRepository.GetTotalCount();
             return View();

@@ -44,14 +44,9 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.Product' does not have a p
     <Property Name="rowguid" Type="uniqueidentifier" Nullable="false" />
     <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'AdventureWorksSales.dbo.ProductCategory' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ProductCategory">
     <Key>
       <PropertyRef Name="ProductCategoryID" />
-      <PropertyRef Name="Name" />
-      <PropertyRef Name="rowguid" />
-      <PropertyRef Name="ModifiedDate" />
     </Key>
     <Property Name="ProductCategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Name" Type="nvarchar" MaxLength="50" Nullable="false" />
@@ -86,6 +81,7 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
     <Property Name="ModifiedDate" Type="datetime" Nullable="false" />
   </EntityType>
   <EntityContainer Name="AdventureWorksSalesModelStoreContainer">
+    <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="Product" EntityType="Self.Product" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 
     [Product].[ProductID] AS [ProductID], 
@@ -114,14 +110,6 @@ warning 6002: The table/view 'AdventureWorksSales.dbo.SalesOrder' does not have 
     [Product].[rowguid] AS [rowguid], 
     [Product].[ModifiedDate] AS [ModifiedDate]
     FROM [dbo].[Product] AS [Product]</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="ProductCategory" EntityType="Self.ProductCategory" store:Type="Tables" store:Schema="dbo">
-      <DefiningQuery>SELECT 
-    [ProductCategory].[ProductCategoryID] AS [ProductCategoryID], 
-    [ProductCategory].[Name] AS [Name], 
-    [ProductCategory].[rowguid] AS [rowguid], 
-    [ProductCategory].[ModifiedDate] AS [ModifiedDate]
-    FROM [dbo].[ProductCategory] AS [ProductCategory]</DefiningQuery>
     </EntitySet>
     <EntitySet Name="SalesOrder" EntityType="Self.SalesOrder" store:Type="Tables" store:Schema="dbo">
       <DefiningQuery>SELECT 

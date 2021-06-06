@@ -19,11 +19,13 @@ namespace AdventureWorksSales.Core.DataManager
         public void Add(TEntity b)
         {
             context.Set<TEntity>().Add(b);
+            context.SaveChanges();
         }
 
         public void Delete(TEntity b)
         {
             context.Set<TEntity>().Remove(b);
+            context.SaveChanges();
         }
 
         public IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate)

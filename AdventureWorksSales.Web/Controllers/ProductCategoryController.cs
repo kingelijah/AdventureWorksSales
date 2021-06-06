@@ -28,12 +28,12 @@ namespace AdventureWorksSales.Web.Controllers
             return View(std);
         }
         [HttpPost]
-        public ActionResult Edit(ProductCategory std)
+        public ActionResult Edit(ProductCategory ptd)
         {
 
-            var student = _productCategoryRepository.GetValue(std.ProductCategoryID);
+            var student = _productCategoryRepository.GetValue(ptd.ProductCategoryID);
             _productCategoryRepository.Delete(student);
-            _productCategoryRepository.Add(std);
+            _productCategoryRepository.Add(ptd);
 
             return RedirectToAction("Index");
         }
@@ -45,6 +45,7 @@ namespace AdventureWorksSales.Web.Controllers
         [HttpPost]
         public ActionResult Create(ProductCategory productCategory)
         {
+            productCategory.ModifiedDate = DateTime.Now;
             _productCategoryRepository.Add(productCategory);
             return RedirectToAction("Index");
 

@@ -25,8 +25,8 @@ namespace AdventureWorksSales.Core
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<ProductCategory> ProductCategories { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<SalesOrder> SalesOrders { get; set; }
     }
 }
